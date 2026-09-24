@@ -17,17 +17,16 @@ import java.util.List;
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
 
-    @Value("${frontend.allowed-origins:http://localhost:5173,http://localhost:5174,https://yovexa-solutions-frontend.vercel.app,https://yovexa-solutions-backend.vercel.app}")
+    @Value("${frontend.allowed-origins:https://yovexa-solutions-frontend.vercel.app,https://yovexa-solutions-backend.vercel.app}")
     private String allowedOrigins;
 
     private List<String> getAllowedOriginsList() {
         if (allowedOrigins == null || allowedOrigins.isBlank()) {
             return List.of(
-                    "http://localhost:5173",
-                    "http://localhost:5174",
+                    // "http://localhost:5173",
+                    // "http://localhost:5174",
                     "https://yovexa-solutions-frontend.vercel.app",
-                    "https://yovexa-solutions-backend.vercel.app"
-            );
+                    "https://yovexa-solutions-backend.vercel.app");
         }
         return Arrays.stream(allowedOrigins.split(","))
                 .map(String::trim)
@@ -45,7 +44,8 @@ public class CorsConfig implements WebMvcConfigurer {
         configuration.setAllowedOrigins(origins);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setExposedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", "Authorization"));
+        configuration.setExposedHeaders(
+                Arrays.asList("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", "Authorization"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 
