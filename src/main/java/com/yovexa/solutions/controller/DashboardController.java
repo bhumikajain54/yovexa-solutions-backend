@@ -16,13 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/admin/dashboard")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
-@Tag(name = "Admin Dashboard", description = "Admin Analytics and Summary Statistics APIs")
+@Tag(name = "Dashboard", description = "Admin Analytics and Summary Statistics APIs")
 public class DashboardController {
 
     private final DashboardService dashboardService;
 
     @GetMapping
     @Operation(summary = "Get admin dashboard statistics", description = "Returns dynamic counts of projects, blogs, inquiries, services and recent entries from MongoDB.")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Dashboard analytics retrieved successfully"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized - JWT required"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Forbidden - Admin role required")
+    })
     public ResponseEntity<ApiResponse<DashboardResponse>> getDashboardStats() {
         DashboardResponse stats = dashboardService.getDashboardStats();
         return ResponseEntity.ok(ApiResponse.success(stats));

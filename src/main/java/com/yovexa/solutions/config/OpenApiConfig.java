@@ -2,10 +2,7 @@ package com.yovexa.solutions.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +14,7 @@ import java.util.List;
 @Configuration
 public class OpenApiConfig {
 
-    @Value("${server.port:8080}")
+    @Value("${server.port:8081}")
     private String serverPort;
 
     @Bean
@@ -26,18 +23,12 @@ public class OpenApiConfig {
 
         return new OpenAPI()
                 .info(new Info()
-                        .title("Yovexa Solutions REST API")
-                        .description("Backend REST API Documentation for Yovexa Solutions CMS, Dynamic Content, and Inquiries.")
-                        .version("1.0.0")
-                        .contact(new Contact()
-                                .name("Yovexa Solutions Support")
-                                .email("contact@yovexasolutions.com")
-                                .url("https://yovexasolutions.com"))
-                        .license(new License().name("Proprietary").url("https://yovexasolutions.com")))
+                        .title("Yovexa Solutions API")
+                        .description("REST API for Yovexa Solutions website, admin panel, authentication, CMS content management, projects, services, blogs, inquiries and site settings.")
+                        .version("1.0.0"))
                 .servers(List.of(
                         new Server().url("http://localhost:" + serverPort).description("Local Development Server")
                 ))
-                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName,
                                 new SecurityScheme()
@@ -45,6 +36,6 @@ public class OpenApiConfig {
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
                                         .bearerFormat("JWT")
-                                        .description("Enter your JWT token to authorize admin endpoints.")));
+                                        .description("Enter your JWT token to authorize protected admin endpoints.")));
     }
 }
