@@ -1,0 +1,41 @@
+# ===================================================================
+# Dockerfile.vercel - Containerized Spring Boot Deployment for Vercel
+# Multi-stage build for Yovexa Solutions Backend (Java 17, Spring Boot 3.3.4)
+# ===================================================================
+
+# -------------------------------------------------------------------
+# Stage 1: Build & Package with Maven + Eclipse Temurin JDK 17
+# -------------------------------------------------------------------
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
+WORKDIR /workspace
+
+# Copy Maven POM and pre-fetch dependencies for layer caching
+COPY pom.xml .
+RUN mvn dependency:go-offline -B || true
+
+# Copy project source code and build production executable JAR
+COPY src ./src
+RUN mvn clean package -DskipTests -B
+
+# -------------------------------------------------------------------
+# Stage 2: Minimal Production Runtime with Eclipse Temurin JRE 17
+# -------------------------------------------------------------------
+FROM eclipse-temurin:17-jre-jammy
+WORKDIR /app
+
+# Run as non-privileged system user for enhanced container security
+RUN groupadd -r appgroup && useradd -r -g appgroup appuser
+
+# Copy Spring Boot fat JAR from build stage
+COPY --from=builder /workspace/target/*.jar /app/app.jar
+RUN chown -R appuser:appgroup /app
+
+USER appuser
+
+# Vercel injects the $PORT environment variable dynamically at container launch
+# Default fallback to 8081 for local container testing
+ENV PORT=8081
+EXPOSE 8081
+
+# Launch Spring Boot with dynamic $PORT binding
+ENTRYPOINT ["sh", "-c", "exec java -Dserver.port=${PORT:-8081} -Djava.security.egd=file:/dev/./urandom -jar /app/app.jar"]

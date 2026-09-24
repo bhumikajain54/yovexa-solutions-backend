@@ -1,0 +1,36 @@
+# Git & GitHub
+.git
+.gitignore
+.github
+
+# IDE & Editor files
+.idea
+.vscode
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+.settings
+
+# Build artifacts
+target/
+*.class
+
+# Log files
+*.log
+logs/
+
+# Local Environment & Secrets
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation & Node (if any)
+node_modules/
+dist/
+build/

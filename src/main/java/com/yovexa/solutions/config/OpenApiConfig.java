@@ -27,6 +27,7 @@ public class OpenApiConfig {
                         .description("REST API for Yovexa Solutions website, admin panel, authentication, CMS content management, projects, services, blogs, inquiries and site settings.")
                         .version("1.0.0"))
                 .servers(List.of(
+                        new Server().url("/").description("Current Server (Production / Local)"),
                         new Server().url("http://localhost:" + serverPort).description("Local Development Server")
                 ))
                 .components(new Components()
