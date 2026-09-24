@@ -22,16 +22,16 @@ public interface BlogRepository extends MongoRepository<Blog, String> {
     long countByStatus(String status);
 
     @Query("{ $and: [ " +
-            "?#{ [0] == null || [0].isEmpty() ? { $expr: { $eq: [1, 1] } } : { 'title': { $regex: [0], $options: 'i' } } }, " +
-            "?#{ [1] == null || [1].isEmpty() || [1] == 'ALL' ? { $expr: { $eq: [1, 1] } } : { 'category': [1] } }, " +
-            "?#{ [2] == null || [2].isEmpty() || [2] == 'ALL' ? { $expr: { $eq: [1, 1] } } : { 'status': [2] } } " +
+            "?#{ [0] == null || [0].isEmpty() ? { '_id': { '$exists': true } } : { 'title': { $regex: [0], $options: 'i' } } }, " +
+            "?#{ [1] == null || [1].isEmpty() || [1] == 'ALL' ? { '_id': { '$exists': true } } : { 'category': [1] } }, " +
+            "?#{ [2] == null || [2].isEmpty() || [2] == 'ALL' ? { '_id': { '$exists': true } } : { 'status': [2] } } " +
             "] }")
     Page<Blog> searchAndFilter(String search, String category, String status, Pageable pageable);
 
     @Query("{ $and: [ " +
             "{ 'status': 'PUBLISHED' }, " +
-            "?#{ [0] == null || [0].isEmpty() ? { $expr: { $eq: [1, 1] } } : { $or: [ { 'title': { $regex: [0], $options: 'i' } }, { 'excerpt': { $regex: [0], $options: 'i' } } ] } }, " +
-            "?#{ [1] == null || [1].isEmpty() || [1] == 'ALL' ? { $expr: { $eq: [1, 1] } } : { 'category': [1] } } " +
+            "?#{ [0] == null || [0].isEmpty() ? { '_id': { '$exists': true } } : { $or: [ { 'title': { $regex: [0], $options: 'i' } }, { 'excerpt': { $regex: [0], $options: 'i' } } ] } }, " +
+            "?#{ [1] == null || [1].isEmpty() || [1] == 'ALL' ? { '_id': { '$exists': true } } : { 'category': [1] } } " +
             "] }")
     Page<Blog> searchPublic(String search, String category, Pageable pageable);
 

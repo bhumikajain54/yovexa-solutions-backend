@@ -14,8 +14,8 @@ public interface ContactInquiryRepository extends MongoRepository<ContactInquiry
     long countByStatus(String status);
 
     @Query("{ $and: [ " +
-            "?#{ [0] == null || [0].isEmpty() ? { $expr: { $eq: [1, 1] } } : { $or: [ { 'fullName': { $regex: [0], $options: 'i' } }, { 'email': { $regex: [0], $options: 'i' } }, { 'companyName': { $regex: [0], $options: 'i' } } ] } }, " +
-            "?#{ [1] == null || [1].isEmpty() || [1] == 'ALL' ? { $expr: { $eq: [1, 1] } } : { 'status': [1] } } " +
+            "?#{ [0] == null || [0].isEmpty() ? { '_id': { '$exists': true } } : { $or: [ { 'fullName': { $regex: [0], $options: 'i' } }, { 'email': { $regex: [0], $options: 'i' } }, { 'companyName': { $regex: [0], $options: 'i' } } ] } }, " +
+            "?#{ [1] == null || [1].isEmpty() || [1] == 'ALL' ? { '_id': { '$exists': true } } : { 'status': [1] } } " +
             "] }")
     Page<ContactInquiry> searchAndFilter(String search, String status, Pageable pageable);
 
