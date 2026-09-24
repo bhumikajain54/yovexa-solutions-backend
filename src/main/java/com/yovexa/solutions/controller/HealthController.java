@@ -6,23 +6,31 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/health")
 @Tag(name = "Health Check", description = "Endpoints for deployment and service health verification")
 public class HealthController {
 
-    @GetMapping
+    @GetMapping("/api/health")
     @Operation(summary = "Check backend service health", description = "Returns UP status for deployment verification without exposing sensitive details.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Application is running and healthy")
     })
     public ResponseEntity<Map<String, String>> checkHealth() {
         return ResponseEntity.ok(Collections.singletonMap("status", "UP"));
+    }
+
+    @GetMapping("/")
+    @Operation(summary = "Root backend status", description = "Returns operational status and documentation links.")
+    public ResponseEntity<Map<String, String>> checkRoot() {
+        return ResponseEntity.ok(Map.of(
+                "status", "UP",
+                "service", "Yovexa Solutions Backend",
+                "docs", "/swagger-ui/index.html"
+        ));
     }
 }

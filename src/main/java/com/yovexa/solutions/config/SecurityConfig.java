@@ -48,8 +48,8 @@ public class SecurityConfig {
                         // Public Auth APIs
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // Public Health Check API
-                        .requestMatchers("/api/health", "/api/health/**").permitAll()
+                        // Public Health Check & Root APIs
+                        .requestMatchers("/", "/api/health", "/api/health/**").permitAll()
 
 
 

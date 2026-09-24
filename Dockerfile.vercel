@@ -23,19 +23,9 @@ RUN mvn clean package -DskipTests -B
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
-# Run as non-privileged system user for enhanced container security
-RUN groupadd -r appgroup && useradd -r -g appgroup appuser
-
-# Copy Spring Boot fat JAR from build stage
+# Copy Spring Boot executable JAR from build stage
 COPY --from=builder /workspace/target/*.jar /app/app.jar
-RUN chown -R appuser:appgroup /app
 
-USER appuser
-
-# Vercel injects the $PORT environment variable dynamically at container launch
-# Default fallback to 8081 for local container testing
-ENV PORT=8081
-EXPOSE 8081
-
-# Launch Spring Boot with dynamic $PORT binding
-ENTRYPOINT ["sh", "-c", "exec java -Dserver.port=${PORT:-8081} -Djava.security.egd=file:/dev/./urandom -jar /app/app.jar"]
+# Launch Spring Boot application using Vercel-assigned PORT
+# JVM memory flags ensure compatibility with Vercel container RAM limits
+ENTRYPOINT ["sh", "-c", "exec java -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/./urandom -jar /app/app.jar"]
