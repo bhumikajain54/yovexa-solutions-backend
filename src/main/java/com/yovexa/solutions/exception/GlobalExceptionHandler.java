@@ -89,9 +89,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Object>> handleDataAccessException(
             DataAccessException ex, WebRequest request) {
         log.error("Database connectivity error while processing request: ", ex);
+        String rootMsg = ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage() : ex.getMessage();
+        if (rootMsg != null) {
+            rootMsg = rootMsg.replaceAll("(?i):[^/@:]+@", ":***@");
+        }
         return ResponseEntity
                 .status(HttpStatus.SERVICE_UNAVAILABLE)
-                .body(ApiResponse.error("Database connection failed. Please verify MongoDB Atlas network whitelist (0.0.0.0/0)."));
+                .body(ApiResponse.error("Database error: " + rootMsg));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
