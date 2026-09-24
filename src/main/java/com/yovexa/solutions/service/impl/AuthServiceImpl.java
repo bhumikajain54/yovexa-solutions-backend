@@ -74,7 +74,7 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new UnauthorizedException("Invalid email or password."));
 
         if (Boolean.FALSE.equals(admin.getIsActive())) {
-            throw new ForbiddenException("Your account is inactive. Please contact an administrator.");
+            throw new UnauthorizedException("Your account is inactive. Please contact an administrator.");
         }
 
         if (!passwordEncoder.matches(request.getPassword(), admin.getPassword())) {
@@ -86,7 +86,7 @@ public class AuthServiceImpl implements AuthService {
                     new UsernamePasswordAuthenticationToken(email, request.getPassword())
             );
         } catch (DisabledException ex) {
-            throw new ForbiddenException("Your account is inactive. Please contact an administrator.");
+            throw new UnauthorizedException("Your account is inactive. Please contact an administrator.");
         } catch (BadCredentialsException | org.springframework.security.authentication.InternalAuthenticationServiceException ex) {
             throw new UnauthorizedException("Invalid email or password.");
         } catch (org.springframework.security.core.AuthenticationException ex) {

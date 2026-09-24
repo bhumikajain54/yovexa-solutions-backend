@@ -192,8 +192,8 @@ class AuthIntegrationTest {
     }
 
     @Test
-    @DisplayName("TEST 7: Login for inactive admin account returns 403 Forbidden")
-    void testLoginWithInactiveAccountThrowsForbidden() {
+    @DisplayName("TEST 7: Login for inactive admin account returns 401 Unauthorized")
+    void testLoginWithInactiveAccountThrowsUnauthorized() {
         Admin admin = Admin.builder()
                 .id("admin-1")
                 .name("Yovexa Admin")
@@ -210,7 +210,7 @@ class AuthIntegrationTest {
                 .password("Password123")
                 .build();
 
-        ForbiddenException ex = assertThrows(ForbiddenException.class, () -> authService.login(request));
+        UnauthorizedException ex = assertThrows(UnauthorizedException.class, () -> authService.login(request));
         assertEquals("Your account is inactive. Please contact an administrator.", ex.getMessage());
     }
 
