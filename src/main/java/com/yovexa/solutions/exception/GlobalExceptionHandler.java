@@ -7,6 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -61,13 +65,33 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(ex.getMessage()));
     }
 
-    @ExceptionHandler({BadCredentialsException.class, UnauthorizedException.class})
+    @ExceptionHandler({
+            BadCredentialsException.class,
+            UnauthorizedException.class,
+            AuthenticationException.class,
+            InternalAuthenticationServiceException.class,
+            UsernameNotFoundException.class
+    })
     public ResponseEntity<ApiResponse<Object>> handleUnauthorizedException(
-            RuntimeException ex, WebRequest request) {
+            Exception ex, WebRequest request) {
         log.warn("Unauthorized access attempt: {}", ex.getMessage());
+        String msg = (ex instanceof BadCredentialsException
+                || ex instanceof InternalAuthenticationServiceException
+                || ex instanceof UsernameNotFoundException)
+                ? "Invalid email or password."
+                : ex.getMessage();
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(ApiResponse.error(ex.getMessage()));
+                .body(ApiResponse.error(msg != null && !msg.isBlank() ? msg : "Invalid email or password."));
+    }
+
+    @ExceptionHandler(DataAccessException.class)
+    public ResponseEntity<ApiResponse<Object>> handleDataAccessException(
+            DataAccessException ex, WebRequest request) {
+        log.error("Database connectivity error while processing request: ", ex);
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(ApiResponse.error("Database connection failed. Please verify MongoDB Atlas network whitelist (0.0.0.0/0)."));
     }
 
     @ExceptionHandler(AccessDeniedException.class)

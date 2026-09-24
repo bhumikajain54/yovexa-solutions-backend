@@ -24,6 +24,8 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Admin not found with email: " + email));
 
         boolean isEnabled = admin.getIsActive() == null || admin.getIsActive();
+        String rawRole = (admin.getRole() != null && !admin.getRole().isBlank()) ? admin.getRole().trim().toUpperCase() : "ADMIN";
+        String authority = rawRole.startsWith("ROLE_") ? rawRole : "ROLE_" + rawRole;
 
         return new User(
                 admin.getEmail(),
@@ -32,7 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 true,
                 true,
                 true,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + admin.getRole()))
+                Collections.singletonList(new SimpleGrantedAuthority(authority))
         );
     }
 }

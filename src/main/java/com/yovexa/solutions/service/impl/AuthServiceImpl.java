@@ -87,7 +87,9 @@ public class AuthServiceImpl implements AuthService {
             );
         } catch (DisabledException ex) {
             throw new ForbiddenException("Your account is inactive. Please contact an administrator.");
-        } catch (BadCredentialsException ex) {
+        } catch (BadCredentialsException | org.springframework.security.authentication.InternalAuthenticationServiceException ex) {
+            throw new UnauthorizedException("Invalid email or password.");
+        } catch (org.springframework.security.core.AuthenticationException ex) {
             throw new UnauthorizedException("Invalid email or password.");
         }
 
