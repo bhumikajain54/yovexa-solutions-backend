@@ -14,29 +14,30 @@ import java.util.List;
 @Configuration
 public class OpenApiConfig {
 
-    @Value("${server.port:8081}")
-    private String serverPort;
+        @Value("${server.port:8081}")
+        private String serverPort;
 
-    @Bean
-    public OpenAPI customOpenAPI() {
-        final String securitySchemeName = "bearerAuth";
+        @Bean
+        public OpenAPI customOpenAPI() {
+                final String securitySchemeName = "bearerAuth";
 
-        return new OpenAPI()
-                .info(new Info()
-                        .title("Yovexa Solutions API")
-                        .description("REST API for Yovexa Solutions website, admin panel, authentication, CMS content management, projects, services, blogs, inquiries and site settings.")
-                        .version("1.0.0"))
-                .servers(List.of(
-                        new Server().url("/").description("Current Server (Production / Local)"),
-                        new Server().url("http://localhost:" + serverPort).description("Local Development Server")
-                ))
-                .components(new Components()
-                        .addSecuritySchemes(securitySchemeName,
-                                new SecurityScheme()
-                                        .name(securitySchemeName)
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT")
-                                        .description("Enter your JWT token to authorize protected admin endpoints.")));
-    }
+                return new OpenAPI()
+                                .info(new Info()
+                                                .title("Yovexa Solutions API")
+                                                .description("REST API for Yovexa Solutions website, admin panel, authentication, CMS content management, projects, services, blogs, inquiries and site settings.")
+                                                .version("1.0.0"))
+                                .servers(List.of(
+                                                new Server().url("/")
+                                                                .description("Current Server (Production / Local)"),
+                                                new Server().url("https://yovexa-solutions-backend.vercel.app:"
+                                                                + serverPort).description("Local Development Server")))
+                                .components(new Components()
+                                                .addSecuritySchemes(securitySchemeName,
+                                                                new SecurityScheme()
+                                                                                .name(securitySchemeName)
+                                                                                .type(SecurityScheme.Type.HTTP)
+                                                                                .scheme("bearer")
+                                                                                .bearerFormat("JWT")
+                                                                                .description("Enter your JWT token to authorize protected admin endpoints.")));
+        }
 }
