@@ -23,9 +23,12 @@ RUN mvn clean package -DskipTests -B
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
-# Copy Spring Boot executable JAR from build stage
+# Copy Spring Boot executable fat JAR from build stage
 COPY --from=builder /workspace/target/*.jar /app/app.jar
 
-# Launch Spring Boot application using Vercel-assigned PORT
-# JVM memory flags ensure compatibility with Vercel container RAM limits
-ENTRYPOINT ["sh", "-c", "exec java -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/./urandom -jar /app/app.jar"]
+# Vercel routes traffic to port 80 by default unless PORT is overridden in project settings
+ENV PORT=80
+EXPOSE 80
+
+# Launch Spring Boot with optimized JVM flags for fast cold-starts (<4s) in container microVMs
+ENTRYPOINT ["sh", "-c", "exec java -XX:+TieredCompilation -XX:TieredStopAtLevel=1 -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -Dserver.port=${PORT} -Djava.security.egd=file:/dev/./urandom -jar /app/app.jar"]
