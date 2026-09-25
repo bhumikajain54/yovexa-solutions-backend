@@ -9,8 +9,6 @@ import com.yovexa.solutions.dto.hero.HeroRequest;
 import com.yovexa.solutions.dto.hero.HeroResponse;
 import com.yovexa.solutions.dto.inquiry.ContactInquiryRequest;
 import com.yovexa.solutions.dto.inquiry.ContactInquiryResponse;
-import com.yovexa.solutions.dto.process.ProcessStepRequest;
-import com.yovexa.solutions.dto.process.ProcessStepResponse;
 import com.yovexa.solutions.dto.project.ProjectRequest;
 import com.yovexa.solutions.dto.project.ProjectResponse;
 import com.yovexa.solutions.dto.service.ServiceRequest;
@@ -214,42 +212,6 @@ public class EntityMapper {
                 .features(request.getFeatures() != null ? request.getFeatures() : new ArrayList<>())
                 .buttonText(request.getButtonText())
                 .buttonLink(request.getButtonLink())
-                .displayOrder(request.getDisplayOrder())
-                .isActive(request.getIsActive() == null || request.getIsActive())
-                .build();
-    }
-
-    // PROCESS STEP
-    public ProcessStepResponse toProcessStepResponse(ProcessStep step) {
-        if (step == null)
-            return null;
-        return ProcessStepResponse.builder()
-                .id(step.getId())
-                .stepNumber(step.getStepNumber())
-                .phase(step.getPhase())
-                .title(step.getTitle())
-                .description(step.getDescription())
-                .details(step.getDetails() != null ? step.getDetails() : new ArrayList<>())
-                .icon(step.getIcon())
-                .tag(step.getTag())
-                .displayOrder(step.getDisplayOrder())
-                .isActive(step.isActive())
-                .createdAt(step.getCreatedAt())
-                .updatedAt(step.getUpdatedAt())
-                .build();
-    }
-
-    public ProcessStep toProcessStep(ProcessStepRequest request) {
-        if (request == null)
-            return null;
-        return ProcessStep.builder()
-                .stepNumber(request.getStepNumber())
-                .phase(request.getPhase())
-                .title(request.getTitle())
-                .description(request.getDescription())
-                .details(request.getDetails() != null ? request.getDetails() : new ArrayList<>())
-                .icon(request.getIcon())
-                .tag(request.getTag())
                 .displayOrder(request.getDisplayOrder())
                 .isActive(request.getIsActive() == null || request.getIsActive())
                 .build();

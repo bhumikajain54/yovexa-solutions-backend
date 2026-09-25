@@ -57,7 +57,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/hero/active").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/about/active").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/services/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/process/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/projects/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/blogs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/site-settings/**").permitAll()
