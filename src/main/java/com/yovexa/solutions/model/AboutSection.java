@@ -37,6 +37,9 @@ public class AboutSection {
 
     private String image;
     private String imageAlt;
+    private String imageCategory;
+    private String imageTitle;
+    private String imageBadge;
 
     private List<String> highlights;
 

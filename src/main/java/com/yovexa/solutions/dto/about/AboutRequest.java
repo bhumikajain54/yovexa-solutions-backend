@@ -59,6 +59,18 @@ public class AboutRequest {
     @Schema(description = "Image alt text", example = "Yovexa Solutions engineering team collaboration")
     private String imageAlt;
 
+    @JsonAlias({"imageCategory", "imageSubtitle", "imageTagline"})
+    @Schema(description = "Image category or kicker", example = "Enterprise Technology")
+    private String imageCategory;
+
+    @JsonAlias({"imageTitle", "imageHeading", "imageHeadline"})
+    @Schema(description = "Image headline or caption title", example = "Cloud Architecture & Digital Solutions")
+    private String imageTitle;
+
+    @JsonAlias({"imageBadge", "imageBadgeText", "imageStatus"})
+    @Schema(description = "Image badge/pill label", example = "Production-Ready")
+    private String imageBadge;
+
     @Schema(description = "Key bullet points or value highlights", example = "[\"Scalable Cloud Architecture\", \"Agile Delivery\", \"24/7 Enterprise Support\"]")
     private List<String> highlights;
 

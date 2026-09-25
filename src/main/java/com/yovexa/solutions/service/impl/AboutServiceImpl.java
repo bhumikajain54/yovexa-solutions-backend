@@ -70,6 +70,9 @@ public class AboutServiceImpl implements AboutService {
         existing.setSecondaryButtonLink(request.getSecondaryButtonLink());
         existing.setImage(request.getImage());
         existing.setImageAlt(request.getImageAlt());
+        existing.setImageCategory(request.getImageCategory());
+        existing.setImageTitle(request.getImageTitle());
+        existing.setImageBadge(request.getImageBadge());
 
         if (request.getStatus() != null) {
             existing.setStatus(request.getStatus().toUpperCase());

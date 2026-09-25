@@ -34,6 +34,9 @@ public class AboutResponse {
     private String secondaryCtaLink;
     private String image;
     private String imageAlt;
+    private String imageCategory;
+    private String imageTitle;
+    private String imageBadge;
     private List<String> highlights;
     private String status;
     private boolean isActive;
