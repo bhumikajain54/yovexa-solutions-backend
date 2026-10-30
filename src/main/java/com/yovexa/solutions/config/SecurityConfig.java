@@ -4,7 +4,6 @@ import com.yovexa.solutions.security.CustomUserDetailsService;
 import com.yovexa.solutions.security.JwtAuthenticationEntryPoint;
 import com.yovexa.solutions.security.JwtAuthenticationFilter;
 import com.yovexa.solutions.security.RateLimitingFilter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,7 +26,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final RateLimitingFilter rateLimitingFilter;
@@ -35,6 +33,19 @@ public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
     private final CorsConfigurationSource corsConfigurationSource;
+
+    public SecurityConfig(
+            RateLimitingFilter rateLimitingFilter,
+            JwtAuthenticationFilter jwtAuthFilter,
+            CustomUserDetailsService userDetailsService,
+            JwtAuthenticationEntryPoint unauthorizedHandler,
+            CorsConfigurationSource corsConfigurationSource) {
+        this.rateLimitingFilter = rateLimitingFilter;
+        this.jwtAuthFilter = jwtAuthFilter;
+        this.userDetailsService = userDetailsService;
+        this.unauthorizedHandler = unauthorizedHandler;
+        this.corsConfigurationSource = corsConfigurationSource;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
