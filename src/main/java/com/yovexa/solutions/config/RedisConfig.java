@@ -44,14 +44,9 @@ import java.util.Map;
 @Configuration
 @EnableCaching
 public class RedisConfig implements CachingConfigurer {
-
-    public static final String HERO_CACHE = "heroes";
-    public static final String ABOUT_CACHE = "about";
-    public static final String SERVICES_CACHE = "services";
     public static final String PROJECTS_CACHE = "projects";
     public static final String CASE_STUDIES_CACHE = "caseStudies";
     public static final String BLOGS_CACHE = "blogs";
-    public static final String SETTINGS_CACHE = "settings";
     public static final String DASHBOARD_CACHE = "dashboard";
     public static final String ADMINS_CACHE = "admins";
 
@@ -204,13 +199,9 @@ public class RedisConfig implements CachingConfigurer {
         // Dashboard stats change and calculate counts; refresh every 5 minutes
         cacheConfigs.put(DASHBOARD_CACHE, defaultConfig.entryTtl(Duration.ofMinutes(5)));
         // Content caches TTL 60 minutes (invalidated on writes)
-        cacheConfigs.put(HERO_CACHE, defaultConfig.entryTtl(Duration.ofMinutes(60)));
-        cacheConfigs.put(ABOUT_CACHE, defaultConfig.entryTtl(Duration.ofMinutes(60)));
-        cacheConfigs.put(SERVICES_CACHE, defaultConfig.entryTtl(Duration.ofMinutes(60)));
         cacheConfigs.put(PROJECTS_CACHE, defaultConfig.entryTtl(Duration.ofMinutes(60)));
         cacheConfigs.put(CASE_STUDIES_CACHE, defaultConfig.entryTtl(Duration.ofMinutes(60)));
         cacheConfigs.put(BLOGS_CACHE, defaultConfig.entryTtl(Duration.ofMinutes(60)));
-        cacheConfigs.put(SETTINGS_CACHE, defaultConfig.entryTtl(Duration.ofMinutes(60)));
         cacheConfigs.put(ADMINS_CACHE, defaultConfig.entryTtl(Duration.ofMinutes(60)));
 
         return RedisCacheManager.builder(connectionFactory)

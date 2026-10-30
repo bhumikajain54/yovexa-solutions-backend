@@ -1,29 +1,21 @@
 package com.yovexa.solutions.mapper;
 
-import com.yovexa.solutions.dto.about.AboutRequest;
-import com.yovexa.solutions.dto.about.AboutResponse;
+import com.yovexa.solutions.dto.admin.AdminProfileResponse;
+import com.yovexa.solutions.dto.admin.AdminResponse;
 import com.yovexa.solutions.dto.auth.UserSummaryDto;
 import com.yovexa.solutions.dto.blog.BlogRequest;
 import com.yovexa.solutions.dto.blog.BlogResponse;
-import com.yovexa.solutions.dto.hero.HeroRequest;
-import com.yovexa.solutions.dto.hero.HeroResponse;
-import com.yovexa.solutions.dto.inquiry.ContactInquiryRequest;
-import com.yovexa.solutions.dto.inquiry.ContactInquiryResponse;
 import com.yovexa.solutions.dto.casestudy.CaseStudyRequest;
 import com.yovexa.solutions.dto.casestudy.CaseStudyResponse;
+import com.yovexa.solutions.dto.inquiry.ContactInquiryRequest;
+import com.yovexa.solutions.dto.inquiry.ContactInquiryResponse;
 import com.yovexa.solutions.dto.project.ProjectRequest;
 import com.yovexa.solutions.dto.project.ProjectResponse;
-import com.yovexa.solutions.dto.service.ServiceRequest;
-import com.yovexa.solutions.dto.service.ServiceResponse;
-import com.yovexa.solutions.dto.settings.SiteSettingsRequest;
-import com.yovexa.solutions.dto.settings.SiteSettingsResponse;
 import com.yovexa.solutions.model.*;
 import com.yovexa.solutions.util.SlugUtils;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import com.yovexa.solutions.dto.admin.AdminProfileResponse;
-import com.yovexa.solutions.dto.admin.AdminResponse;
 import java.util.ArrayList;
 
 @Component
@@ -64,158 +56,6 @@ public class EntityMapper {
                 .email(admin.getEmail())
                 .role(admin.getRole())
                 .isActive(Boolean.TRUE.equals(admin.getIsActive()))
-                .build();
-    }
-
-    // HERO
-    public HeroResponse toHeroResponse(HeroSection hero) {
-        if (hero == null)
-            return null;
-        return HeroResponse.builder()
-                .id(hero.getId())
-                .eyebrow(hero.getEyebrow())
-                .badge(hero.getEyebrow())
-                .headline(hero.getHeadline())
-                .heading(hero.getHeadline())
-                .highlightedHeadline(hero.getHighlightedHeadline())
-                .highlightedText(hero.getHighlightedHeadline())
-                .description(hero.getDescription())
-                .heroImage(hero.getHeroImage())
-                .heroImageAlt(hero.getHeroImageAlt())
-                .primaryCtaLabel(hero.getPrimaryCtaLabel())
-                .primaryCtaText(hero.getPrimaryCtaLabel())
-                .primaryCtaLink(hero.getPrimaryCtaLink())
-                .secondaryCtaLabel(hero.getSecondaryCtaLabel())
-                .secondaryCtaText(hero.getSecondaryCtaLabel())
-                .secondaryCtaLink(hero.getSecondaryCtaLink())
-                .status(hero.getStatus())
-                .isActive(hero.isActive())
-                .createdAt(hero.getCreatedAt())
-                .updatedAt(hero.getUpdatedAt())
-                .build();
-    }
-
-    public HeroSection toHeroSection(HeroRequest request) {
-        if (request == null)
-            return null;
-        return HeroSection.builder()
-                .eyebrow(request.getEyebrow())
-                .headline(request.getHeadline())
-                .highlightedHeadline(request.getHighlightedHeadline())
-                .description(request.getDescription())
-                .heroImage(request.getHeroImage())
-                .heroImageAlt(request.getHeroImageAlt())
-                .primaryCtaLabel(request.getPrimaryCtaLabel())
-                .primaryCtaLink(request.getPrimaryCtaLink())
-                .secondaryCtaLabel(request.getSecondaryCtaLabel())
-                .secondaryCtaLink(request.getSecondaryCtaLink())
-                .status(request.getStatus() != null ? request.getStatus().toUpperCase() : "DRAFT")
-                .isActive(request.getIsActive() != null && request.getIsActive())
-                .build();
-    }
-
-    // ABOUT
-    public AboutResponse toAboutResponse(AboutSection about) {
-        if (about == null)
-            return null;
-        return AboutResponse.builder()
-                .id(about.getId())
-                .eyebrow(about.getEyebrow())
-                .badge(about.getEyebrow())
-                .sectionLabel(about.getEyebrow())
-                .title(about.getTitle())
-                .highlightedTitle(about.getHighlightedTitle())
-                .titleHighlight(about.getHighlightedTitle())
-                .primaryParagraph(about.getPrimaryParagraph())
-                .description(about.getPrimaryParagraph())
-                .secondaryParagraph(about.getSecondaryParagraph())
-                .additionalDescription(about.getSecondaryParagraph())
-                .primaryButtonLabel(about.getPrimaryButtonLabel())
-                .primaryCtaText(about.getPrimaryButtonLabel())
-                .primaryButtonLink(about.getPrimaryButtonLink())
-                .primaryCtaLink(about.getPrimaryButtonLink())
-                .secondaryButtonLabel(about.getSecondaryButtonLabel())
-                .secondaryCtaText(about.getSecondaryButtonLabel())
-                .secondaryButtonLink(about.getSecondaryButtonLink())
-                .secondaryCtaLink(about.getSecondaryButtonLink())
-                .image(about.getImage())
-                .imageAlt(about.getImageAlt())
-                .imageCategory(about.getImageCategory())
-                .imageTitle(about.getImageTitle())
-                .imageBadge(about.getImageBadge())
-                .highlights(about.getHighlights() != null ? about.getHighlights() : new ArrayList<>())
-                .status(about.getStatus())
-                .isActive(about.isActive())
-                .createdAt(about.getCreatedAt())
-                .updatedAt(about.getUpdatedAt())
-                .build();
-    }
-
-    public AboutSection toAboutSection(AboutRequest request) {
-        if (request == null)
-            return null;
-        return AboutSection.builder()
-                .eyebrow(request.getEyebrow())
-                .title(request.getTitle())
-                .highlightedTitle(request.getHighlightedTitle())
-                .primaryParagraph(request.getPrimaryParagraph())
-                .secondaryParagraph(request.getSecondaryParagraph())
-                .primaryButtonLabel(request.getPrimaryButtonLabel())
-                .primaryButtonLink(request.getPrimaryButtonLink())
-                .secondaryButtonLabel(request.getSecondaryButtonLabel())
-                .secondaryButtonLink(request.getSecondaryButtonLink())
-                .image(request.getImage())
-                .imageAlt(request.getImageAlt())
-                .imageCategory(request.getImageCategory())
-                .imageTitle(request.getImageTitle())
-                .imageBadge(request.getImageBadge())
-                .highlights(request.getHighlights() != null ? request.getHighlights() : new ArrayList<>())
-                .status(request.getStatus() != null ? request.getStatus().toUpperCase() : "DRAFT")
-                .isActive(request.getIsActive() != null && request.getIsActive())
-                .build();
-    }
-
-    // SERVICE
-    public ServiceResponse toServiceResponse(Service service) {
-        if (service == null)
-            return null;
-        return ServiceResponse.builder()
-                .id(service.getId())
-                .title(service.getTitle())
-                .slug(service.getSlug())
-                .shortDescription(service.getShortDescription())
-                .description(service.getDescription())
-                .icon(service.getIcon())
-                .popularTag(service.getPopularTag())
-                .features(service.getFeatures() != null ? service.getFeatures() : new ArrayList<>())
-                .buttonText(service.getButtonText())
-                .buttonLink(service.getButtonLink())
-                .displayOrder(service.getDisplayOrder())
-                .isActive(service.isActive())
-                .createdAt(service.getCreatedAt())
-                .updatedAt(service.getUpdatedAt())
-                .build();
-    }
-
-    public Service toService(ServiceRequest request) {
-        if (request == null)
-            return null;
-        String slug = (request.getSlug() != null && !request.getSlug().trim().isEmpty())
-                ? SlugUtils.toSlug(request.getSlug())
-                : SlugUtils.toSlug(request.getTitle());
-
-        return Service.builder()
-                .title(request.getTitle())
-                .slug(slug)
-                .shortDescription(request.getShortDescription())
-                .description(request.getDescription())
-                .icon(request.getIcon())
-                .popularTag(request.getPopularTag())
-                .features(request.getFeatures() != null ? request.getFeatures() : new ArrayList<>())
-                .buttonText(request.getButtonText())
-                .buttonLink(request.getButtonLink())
-                .displayOrder(request.getDisplayOrder())
-                .isActive(request.getIsActive() == null || request.getIsActive())
                 .build();
     }
 
@@ -397,60 +237,6 @@ public class EntityMapper {
                 .message(request.getMessage())
                 .status("NEW")
                 .build();
-    }
-
-    // SITE SETTINGS
-    public SiteSettingsResponse toSiteSettingsResponse(SiteSettings settings) {
-        if (settings == null)
-            return null;
-        return SiteSettingsResponse.builder()
-                .id(settings.getId())
-                .contactEmail(settings.getContactEmail())
-                .phone(settings.getPhone())
-                .whatsapp(settings.getWhatsapp())
-                .location(settings.getLocation())
-                .address(settings.getAddress())
-                .workingHours(settings.getWorkingHours())
-                .footerDescription(settings.getFooterDescription())
-                .copyrightText(settings.getCopyrightText())
-                .linkedin(settings.getLinkedin())
-                .github(settings.getGithub())
-                .instagram(settings.getInstagram())
-                .facebook(settings.getFacebook())
-                .budgetOptions(settings.getBudgetOptions())
-                .updatedAt(settings.getUpdatedAt())
-                .build();
-    }
-
-    public void updateSiteSettings(SiteSettings entity, SiteSettingsRequest request) {
-        if (entity == null || request == null)
-            return;
-        if (request.getContactEmail() != null)
-            entity.setContactEmail(request.getContactEmail());
-        if (request.getPhone() != null)
-            entity.setPhone(request.getPhone());
-        if (request.getWhatsapp() != null)
-            entity.setWhatsapp(request.getWhatsapp());
-        if (request.getLocation() != null)
-            entity.setLocation(request.getLocation());
-        if (request.getAddress() != null)
-            entity.setAddress(request.getAddress());
-        if (request.getWorkingHours() != null)
-            entity.setWorkingHours(request.getWorkingHours());
-        if (request.getFooterDescription() != null)
-            entity.setFooterDescription(request.getFooterDescription());
-        if (request.getCopyrightText() != null)
-            entity.setCopyrightText(request.getCopyrightText());
-        if (request.getLinkedin() != null)
-            entity.setLinkedin(request.getLinkedin());
-        if (request.getGithub() != null)
-            entity.setGithub(request.getGithub());
-        if (request.getInstagram() != null)
-            entity.setInstagram(request.getInstagram());
-        if (request.getFacebook() != null)
-            entity.setFacebook(request.getFacebook());
-        if (request.getBudgetOptions() != null)
-            entity.setBudgetOptions(request.getBudgetOptions());
     }
 
     // CASE STUDY

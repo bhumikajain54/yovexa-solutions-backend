@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class DashboardServiceImpl implements DashboardService {
 
     private final ProjectRepository projectRepository;
-    private final ServiceRepository serviceRepository;
+    private final CaseStudyRepository caseStudyRepository;
     private final BlogRepository blogRepository;
     private final ContactInquiryRepository inquiryRepository;
     private final EntityMapper mapper;
@@ -23,7 +23,7 @@ public class DashboardServiceImpl implements DashboardService {
     public DashboardResponse getDashboardStats() {
         long totalProjects = projectRepository.count();
         long publishedProjects = projectRepository.countByStatus("PUBLISHED");
-        long totalServices = serviceRepository.count();
+        long totalCaseStudies = caseStudyRepository.count();
         long publishedBlogs = blogRepository.countByStatus("PUBLISHED");
         long draftBlogs = blogRepository.countByStatus("DRAFT");
         long totalInquiries = inquiryRepository.count();
@@ -47,7 +47,7 @@ public class DashboardServiceImpl implements DashboardService {
         return DashboardResponse.builder()
                 .projects(totalProjects)
                 .publishedProjects(publishedProjects)
-                .services(totalServices)
+                .caseStudies(totalCaseStudies)
                 .publishedBlogs(publishedBlogs)
                 .draftBlogs(draftBlogs)
                 .inquiries(totalInquiries)

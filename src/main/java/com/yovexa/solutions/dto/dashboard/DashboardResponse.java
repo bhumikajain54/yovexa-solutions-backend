@@ -17,7 +17,7 @@ import java.util.List;
 public class DashboardResponse {
     private long projects;
     private long publishedProjects;
-    private long services;
+    private long caseStudies;
     private long publishedBlogs;
     private long draftBlogs;
     private long inquiries;
