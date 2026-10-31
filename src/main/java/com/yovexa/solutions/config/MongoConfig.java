@@ -19,11 +19,13 @@ public class MongoConfig {
                 .applyToConnectionPoolSettings(pool -> pool
                         .minSize(2)
                         .maxSize(25)
-                        .maxWaitTime(5, TimeUnit.SECONDS)
+                        .maxWaitTime(10, TimeUnit.SECONDS)
                         .maxConnectionIdleTime(60, TimeUnit.SECONDS))
                 .applyToSocketSettings(socket -> socket
-                        .connectTimeout(5, TimeUnit.SECONDS)
-                        .readTimeout(10, TimeUnit.SECONDS));
+                        .connectTimeout(15, TimeUnit.SECONDS)
+                        .readTimeout(30, TimeUnit.SECONDS))
+                .applyToClusterSettings(cluster -> cluster
+                        .serverSelectionTimeout(20, TimeUnit.SECONDS));
     }
 
     @Bean

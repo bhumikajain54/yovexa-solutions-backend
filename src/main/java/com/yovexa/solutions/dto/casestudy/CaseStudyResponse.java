@@ -26,6 +26,8 @@ public class CaseStudyResponse {
     private List<String> features;
     private List<String> technologies;
     private String featuredImage;
+    private String image;
+    private String thumbnailUrl;
     private String liveUrl;
     private String githubUrl;
     private String status;

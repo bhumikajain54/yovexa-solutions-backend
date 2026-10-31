@@ -108,6 +108,7 @@ public class SecurityConfig {
 
                         // Protected Admin APIs
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/imagekit/**").hasRole("ADMIN")
 
                         // All other requests require authentication
                         .anyRequest().authenticated()

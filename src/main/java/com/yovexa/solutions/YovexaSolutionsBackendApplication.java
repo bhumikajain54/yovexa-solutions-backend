@@ -34,6 +34,20 @@ public class YovexaSolutionsBackendApplication {
                 if (System.getProperty(key) == null && System.getenv(key) == null) {
                     System.setProperty(key, value);
                 }
+                String upperKey = key.toUpperCase();
+                if (System.getProperty(upperKey) == null && System.getenv(upperKey) == null) {
+                    System.setProperty(upperKey, value);
+                }
+                if (key.equalsIgnoreCase("Imagekit_Private")) {
+                    if (System.getProperty("IMAGEKIT_PRIVATE_KEY") == null && System.getenv("IMAGEKIT_PRIVATE_KEY") == null) {
+                        System.setProperty("IMAGEKIT_PRIVATE_KEY", value);
+                    }
+                }
+                if (key.equalsIgnoreCase("Imagekit_Public")) {
+                    if (System.getProperty("IMAGEKIT_PUBLIC_KEY") == null && System.getenv("IMAGEKIT_PUBLIC_KEY") == null) {
+                        System.setProperty("IMAGEKIT_PUBLIC_KEY", value);
+                    }
+                }
             }
         } catch (Exception ignored) {
         }

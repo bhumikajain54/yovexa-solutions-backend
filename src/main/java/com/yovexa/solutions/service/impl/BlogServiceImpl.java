@@ -9,6 +9,7 @@ import com.yovexa.solutions.mapper.EntityMapper;
 import com.yovexa.solutions.model.Blog;
 import com.yovexa.solutions.repository.BlogRepository;
 import com.yovexa.solutions.service.BlogService;
+import com.yovexa.solutions.util.ImageUrlUtils;
 import com.yovexa.solutions.util.SlugUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -44,17 +45,17 @@ public class BlogServiceImpl implements BlogService {
         String normCategory = com.yovexa.solutions.util.CacheKeyUtils.normalizeCategory(category);
         String normSearch = com.yovexa.solutions.util.CacheKeyUtils.normalizeSearch(search);
 
-        List<Blog> list;
+        List<Blog> list = blogRepository.findByStatusOrderByPublishedAtDesc("PUBLISHED");
+
         if (!"all".equals(normCategory)) {
-            String safeNormCategory = com.yovexa.solutions.util.MongoSecurityUtils.escapeRegex(normCategory);
-            String publicCatRegex = safeNormCategory.replace("_", "[ _-]*");
-            Query q = new Query();
-            q.addCriteria(Criteria.where("status").is("PUBLISHED"));
-            q.addCriteria(Criteria.where("category").regex("(?i)^" + publicCatRegex + "$"));
-            q.with(Sort.by(Sort.Direction.DESC, "publishedAt"));
-            list = mongoTemplate.find(q, Blog.class);
-        } else {
-            list = blogRepository.findByStatusOrderByPublishedAtDesc("PUBLISHED");
+            String catRegex = normCategory.replace("_", "[ _-]*");
+            list = list.stream()
+                    .filter(b -> {
+                        if (b.getCategory() == null) return false;
+                        String bCat = b.getCategory().toUpperCase().replaceAll("[\\s-]+", "_");
+                        return bCat.equals(normCategory) || b.getCategory().matches("(?i).*" + catRegex + ".*");
+                    })
+                    .toList();
         }
 
         if (!normSearch.isEmpty()) {
@@ -90,11 +91,12 @@ public class BlogServiceImpl implements BlogService {
         }
 
         if (!"all".equals(normCategory)) {
-            String pagedCatRegex = com.yovexa.solutions.util.MongoSecurityUtils.escapeRegex(normCategory).replace("_", "[ _-]*");
-            criteriaList.add(Criteria.where("category").regex("(?i)^" + pagedCatRegex + "$"));
+            String cleanCat = normCategory.replaceAll("[^A-Za-z0-9_]", "");
+            String pagedCatRegex = "^" + cleanCat.replace("_", "[ _-]*") + "$";
+            criteriaList.add(Criteria.where("category").regex(pagedCatRegex, "i"));
         }
 
-        query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
+        query.addCriteria(new Criteria().andOperator(criteriaList.toArray(Criteria[]::new)));
 
         long total = mongoTemplate.count(query, Blog.class);
         query.with(pageable);
@@ -131,9 +133,9 @@ public class BlogServiceImpl implements BlogService {
         }
 
         if (category != null && !category.trim().isEmpty() && !category.equalsIgnoreCase("ALL")) {
-            String norm = category.trim().toUpperCase().replaceAll("[\\s-]+", "_");
-            String adminCatRegex = com.yovexa.solutions.util.MongoSecurityUtils.escapeRegex(norm).replace("_", "[ _-]*");
-            criteriaList.add(Criteria.where("category").regex("(?i)^" + adminCatRegex + "$"));
+            String norm = category.trim().toUpperCase().replaceAll("[\\s-]+", "_").replaceAll("[^A-Za-z0-9_]", "");
+            String adminCatRegex = "^" + norm.replace("_", "[ _-]*") + "$";
+            criteriaList.add(Criteria.where("category").regex(adminCatRegex, "i"));
         }
 
         if (status != null && !status.trim().isEmpty() && !status.equalsIgnoreCase("ALL")) {
@@ -141,7 +143,7 @@ public class BlogServiceImpl implements BlogService {
         }
 
         if (!criteriaList.isEmpty()) {
-            query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
+            query.addCriteria(new Criteria().andOperator(criteriaList.toArray(Criteria[]::new)));
         }
 
         long total = mongoTemplate.count(query, Blog.class);
@@ -164,6 +166,10 @@ public class BlogServiceImpl implements BlogService {
     @CacheEvict(value = {"blogs", "dashboard"}, allEntries = true)
     public BlogResponse createBlog(BlogRequest request) {
         Blog blog = mapper.toBlog(request);
+
+        if (request.getFeaturedImage() != null) {
+            blog.setFeaturedImage(ImageUrlUtils.resolveImageUrl(request.getFeaturedImage()));
+        }
 
         if (blogRepository.existsBySlug(blog.getSlug())) {
             blog.setSlug(blog.getSlug() + "-" + System.currentTimeMillis());
@@ -192,7 +198,9 @@ public class BlogServiceImpl implements BlogService {
 
         existing.setExcerpt(request.getExcerpt());
         existing.setContent(request.getContent());
-        existing.setFeaturedImage(request.getFeaturedImage());
+        if (request.getFeaturedImage() != null) {
+            existing.setFeaturedImage(ImageUrlUtils.resolveImageUrl(request.getFeaturedImage()));
+        }
         existing.setCategory(request.getCategory());
         existing.setAuthor(request.getAuthor());
         if (request.getTags() != null) {

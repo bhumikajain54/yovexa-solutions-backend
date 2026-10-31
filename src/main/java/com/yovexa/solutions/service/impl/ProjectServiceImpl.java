@@ -9,6 +9,7 @@ import com.yovexa.solutions.mapper.EntityMapper;
 import com.yovexa.solutions.model.Project;
 import com.yovexa.solutions.repository.ProjectRepository;
 import com.yovexa.solutions.service.ProjectService;
+import com.yovexa.solutions.util.ImageUrlUtils;
 import com.yovexa.solutions.util.SlugUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -110,7 +111,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         if (!criteriaList.isEmpty()) {
-            query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
+            query.addCriteria(new Criteria().andOperator(criteriaList.toArray(Criteria[]::new)));
         }
 
         long total = mongoTemplate.count(query, Project.class);
@@ -173,8 +174,11 @@ public class ProjectServiceImpl implements ProjectService {
             existing.setCategory(request.getCategory().toUpperCase());
         }
         existing.setProjectType(request.getProjectType());
-        existing.setFeaturedImage(request.getFeaturedImage());
-        existing.setImage(request.getFeaturedImage());
+        if (request.getFeaturedImage() != null) {
+            String img = ImageUrlUtils.resolveImageUrl(request.getFeaturedImage());
+            existing.setFeaturedImage(img);
+            existing.setImage(img);
+        }
         if (request.getFeatures() != null) {
             existing.setFeatures(request.getFeatures());
         }

@@ -9,6 +9,7 @@ import com.yovexa.solutions.mapper.EntityMapper;
 import com.yovexa.solutions.model.CaseStudy;
 import com.yovexa.solutions.repository.CaseStudyRepository;
 import com.yovexa.solutions.service.CaseStudyService;
+import com.yovexa.solutions.util.ImageUrlUtils;
 import com.yovexa.solutions.util.SlugUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -108,7 +109,7 @@ public class CaseStudyServiceImpl implements CaseStudyService {
         }
 
         if (!criteriaList.isEmpty()) {
-            query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
+            query.addCriteria(new Criteria().andOperator(criteriaList.toArray(Criteria[]::new)));
         }
 
         long total = mongoTemplate.count(query, CaseStudy.class);
@@ -132,6 +133,10 @@ public class CaseStudyServiceImpl implements CaseStudyService {
     @CacheEvict(value = "caseStudies", allEntries = true)
     public CaseStudyResponse createCaseStudy(CaseStudyRequest request) {
         CaseStudy caseStudy = mapper.toCaseStudy(request);
+
+        if (request.getFeaturedImage() != null) {
+            caseStudy.setFeaturedImage(ImageUrlUtils.resolveImageUrl(request.getFeaturedImage()));
+        }
 
         if (caseStudyRepository.existsBySlug(caseStudy.getSlug())) {
             throw new DuplicateResourceException("CaseStudy", "slug", caseStudy.getSlug());
@@ -173,7 +178,9 @@ public class CaseStudyServiceImpl implements CaseStudyService {
         if (request.getTechnologies() != null) {
             existing.setTechnologies(request.getTechnologies());
         }
-        existing.setFeaturedImage(request.getFeaturedImage());
+        if (request.getFeaturedImage() != null) {
+            existing.setFeaturedImage(ImageUrlUtils.resolveImageUrl(request.getFeaturedImage()));
+        }
         existing.setLiveUrl(request.getLiveUrl());
         existing.setGithubUrl(request.getGithubUrl());
 

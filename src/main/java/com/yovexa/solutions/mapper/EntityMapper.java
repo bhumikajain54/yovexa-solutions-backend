@@ -12,6 +12,7 @@ import com.yovexa.solutions.dto.inquiry.ContactInquiryResponse;
 import com.yovexa.solutions.dto.project.ProjectRequest;
 import com.yovexa.solutions.dto.project.ProjectResponse;
 import com.yovexa.solutions.model.*;
+import com.yovexa.solutions.util.ImageUrlUtils;
 import com.yovexa.solutions.util.SlugUtils;
 import org.springframework.stereotype.Component;
 
@@ -163,6 +164,8 @@ public class EntityMapper {
                 .excerpt(blog.getExcerpt())
                 .content(blog.getContent())
                 .featuredImage(blog.getFeaturedImage())
+                .image(blog.getFeaturedImage())
+                .thumbnailUrl(blog.getFeaturedImage())
                 .category(blog.getCategory())
                 .author(blog.getAuthor())
                 .tags(blog.getTags() != null ? blog.getTags() : new ArrayList<>())
@@ -189,12 +192,14 @@ public class EntityMapper {
             publishedAt = Instant.now();
         }
 
+        String img = ImageUrlUtils.resolveImageUrl(request.getFeaturedImage());
+
         return Blog.builder()
                 .title(request.getTitle())
                 .slug(slug)
                 .excerpt(request.getExcerpt())
                 .content(request.getContent())
-                .featuredImage(request.getFeaturedImage())
+                .featuredImage(img)
                 .category(request.getCategory())
                 .author(request.getAuthor())
                 .tags(request.getTags() != null ? request.getTags() : new ArrayList<>())
@@ -257,6 +262,8 @@ public class EntityMapper {
                 .features(caseStudy.getFeatures() != null ? caseStudy.getFeatures() : new ArrayList<>())
                 .technologies(caseStudy.getTechnologies() != null ? caseStudy.getTechnologies() : new ArrayList<>())
                 .featuredImage(caseStudy.getFeaturedImage())
+                .image(caseStudy.getFeaturedImage())
+                .thumbnailUrl(caseStudy.getFeaturedImage())
                 .liveUrl(caseStudy.getLiveUrl())
                 .githubUrl(caseStudy.getGithubUrl())
                 .status(caseStudy.getStatus() != null ? caseStudy.getStatus() : "PUBLISHED")
@@ -276,6 +283,8 @@ public class EntityMapper {
                 ? SlugUtils.toSlug(request.getSlug())
                 : SlugUtils.toSlug(request.getTitle());
 
+        String img = ImageUrlUtils.resolveImageUrl(request.getFeaturedImage());
+
         return CaseStudy.builder()
                 .title(request.getTitle())
                 .slug(slug)
@@ -288,7 +297,7 @@ public class EntityMapper {
                 .solution(request.getSolution())
                 .features(request.getFeatures() != null ? request.getFeatures() : new ArrayList<>())
                 .technologies(request.getTechnologies() != null ? request.getTechnologies() : new ArrayList<>())
-                .featuredImage(request.getFeaturedImage())
+                .featuredImage(img)
                 .liveUrl(request.getLiveUrl())
                 .githubUrl(request.getGithubUrl())
                 .status(request.getStatus() != null ? request.getStatus().toUpperCase() : "PUBLISHED")

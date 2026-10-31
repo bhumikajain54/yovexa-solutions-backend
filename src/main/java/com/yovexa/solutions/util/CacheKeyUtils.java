@@ -3,7 +3,7 @@ package com.yovexa.solutions.util;
 import java.util.Locale;
 
 /**
- * Standardized cache key generator for Redis.
+ * Standardized cache key generator.
  * Ensures consistent cache hits across varying frontend request patterns
  * (e.g. null, empty string "", uppercase "ALL", lowercase "all", hyphens vs underscores).
  */

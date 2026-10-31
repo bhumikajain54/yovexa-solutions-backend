@@ -54,7 +54,7 @@ public class CaseStudyRequest {
     @Schema(description = "Technologies used in case study", example = "[\"Kafka\", \"Mongodb\", \"Spring Boot\", \"React\"]")
     private List<String> technologies;
 
-    @JsonAlias("image")
+    @JsonAlias({"image", "thumbnailUrl", "imageUrl"})
     @Schema(description = "Architecture diagram or cover image URL", example = "https://images.unsplash.com/photo-...")
     private String featuredImage;
 

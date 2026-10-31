@@ -19,6 +19,8 @@ public class BlogResponse {
     private String excerpt;
     private String content;
     private String featuredImage;
+    private String image;
+    private String thumbnailUrl;
     private String category;
     private String author;
     private List<String> tags;

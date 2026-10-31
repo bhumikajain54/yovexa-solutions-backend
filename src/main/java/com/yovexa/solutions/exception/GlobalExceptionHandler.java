@@ -122,6 +122,15 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(ex.getMessage()));
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiResponse<Object>> handleIllegalStateException(
+            IllegalStateException ex, WebRequest request) {
+        log.error("Server configuration or state error: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error(ex.getMessage()));
+    }
+
     @ExceptionHandler({
             org.springframework.web.context.request.async.AsyncRequestNotUsableException.class,
             org.apache.catalina.connector.ClientAbortException.class

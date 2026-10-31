@@ -1,6 +1,6 @@
 package com.yovexa.solutions.service;
 
-import com.yovexa.solutions.config.RedisConfig;
+import com.yovexa.solutions.config.CacheConfig;
 import com.yovexa.solutions.exception.UnauthorizedException;
 import com.yovexa.solutions.model.Admin;
 import com.yovexa.solutions.model.RefreshToken;
@@ -222,7 +222,7 @@ public class RefreshTokenService {
     private void evictAdminCache() {
         try {
             if (cacheManager != null) {
-                Cache cache = cacheManager.getCache(RedisConfig.ADMINS_CACHE);
+                Cache cache = cacheManager.getCache(CacheConfig.ADMINS_CACHE);
                 if (cache != null) {
                     cache.clear();
                     log.info("Evicted admin cache due to security revocation.");

@@ -1,5 +1,6 @@
 package com.yovexa.solutions.dto.blog;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,7 @@ public class BlogRequest {
     @Schema(description = "Full article content in Markdown or HTML format", example = "# Scalable Architectures\nSpring Boot 3 brings AOT compilation and native images...")
     private String content;
 
+    @JsonAlias({"image", "thumbnailUrl", "imageUrl"})
     @Schema(description = "Cover image URL", example = "https://images.unsplash.com/photo-1518770660439-4636190af475")
     private String featuredImage;
 
