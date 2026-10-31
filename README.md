@@ -4,7 +4,7 @@
 [![Spring Boot 3.3.4](https://img.shields.io/badge/Spring%20Boot-3.3.4-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas%20Ready-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![JWT Auth](https://img.shields.io/badge/Auth-JWT%20Stateless-000000?logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
-[![Swagger OpenAPI](https://img.shields.io/badge/API%20Docs-Swagger%20OpenAPI-85EA2D?logo=swagger&logoColor=black)](http://localhost:8080/swagger-ui.html)
+[![Swagger OpenAPI](https://img.shields.io/badge/API%20Docs-Swagger%20OpenAPI-85EA2D?logo=swagger&logoColor=black)](http://localhost:8081/swagger-ui.html)
 
 A production-ready standalone REST API backend for the **Yovexa Solutions** dynamic CMS, portfolio, and corporate website. Built with **Spring Boot 3.x**, **Spring Data MongoDB**, **Spring Security with JWT authentication**, and **Jakarta Bean Validation**.
 
@@ -138,7 +138,7 @@ Create a `.env` file or export the following variables:
 
 | Variable | Description | Default / Example |
 |---|---|---|
-| `SERVER_PORT` | HTTP port for backend server | `8080` |
+| `SERVER_PORT` | HTTP port for backend server | `8081` |
 | `MONGODB_URI` | MongoDB Connection URI (Local or Atlas) | `mongodb://localhost:27017/yovexa_production` |
 | `MONGODB_DATABASE` | MongoDB Database Name | `yovexa_production` |
 | `JWT_SECRET` | 256-bit secret string for HMAC signing | `<your-256-bit-secret>` |
@@ -164,7 +164,7 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-The server will start on `http://localhost:8080`.
+The server will start on `http://localhost:8081`.
 
 ---
 
@@ -172,8 +172,8 @@ The server will start on `http://localhost:8080`.
 
 Once running, access the interactive OpenAPI documentation:
 
-- **Swagger UI**: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-- **OpenAPI JSON**: [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+- **Swagger UI**: [http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html)
+- **OpenAPI JSON**: [http://localhost:8081/v3/api-docs](http://localhost:8081/v3/api-docs)
 
 > **To access Admin APIs in Swagger UI**:
 > 1. Call `POST /api/auth/login` to get a JWT token.
